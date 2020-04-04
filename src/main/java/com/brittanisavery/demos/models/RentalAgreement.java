@@ -1,6 +1,9 @@
 package com.brittanisavery.demos.models;
 
+import java.text.NumberFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.StringJoiner;
 
 public class RentalAgreement {
     private Tool tool;
@@ -13,11 +16,14 @@ public class RentalAgreement {
     private double discountAmount;
     private double finalCharge;
 
+    protected final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("mm/dd/yy");
+    protected final NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance();
+
     public Tool getTool() {
         return this.tool;
     }
 
-    public void setTool(Tool tool) {
+    public void setTool(final Tool tool) {
         this.tool = tool;
     }
 
@@ -25,7 +31,7 @@ public class RentalAgreement {
         return this.length;
     }
 
-    public void setLength(int length) {
+    public void setLength(final int length) {
         this.length = length;
     }
 
@@ -33,7 +39,7 @@ public class RentalAgreement {
         return this.checkoutDate;
     }
 
-    public void setCheckoutDate(LocalDate checkoutDate) {
+    public void setCheckoutDate(final LocalDate checkoutDate) {
         this.checkoutDate = checkoutDate;
     }
 
@@ -41,7 +47,7 @@ public class RentalAgreement {
         return this.dueDate;
     }
 
-    public void setDueDate(LocalDate dueDate) {
+    public void setDueDate(final LocalDate dueDate) {
         this.dueDate = dueDate;
     }
 
@@ -49,7 +55,7 @@ public class RentalAgreement {
         return this.chargeDays;
     }
 
-    public void setChargeDays(int chargeDays) {
+    public void setChargeDays(final int chargeDays) {
         this.chargeDays = chargeDays;
     }
 
@@ -57,7 +63,7 @@ public class RentalAgreement {
         return this.discountPercent;
     }
 
-    public void setDiscountPercent(int discountPercent) {
+    public void setDiscountPercent(final int discountPercent) {
         this.discountPercent = discountPercent;
     }
 
@@ -65,7 +71,7 @@ public class RentalAgreement {
         return this.preDiscountCharge;
     }
 
-    public void setPreDiscountCharge(double preDiscountCharge) {
+    public void setPreDiscountCharge(final double preDiscountCharge) {
         this.preDiscountCharge = preDiscountCharge;
     }
 
@@ -73,7 +79,7 @@ public class RentalAgreement {
         return this.discountAmount;
     }
 
-    public void setDiscountAmount(double discountAmount) {
+    public void setDiscountAmount(final double discountAmount) {
         this.discountAmount = discountAmount;
     }
 
@@ -81,17 +87,27 @@ public class RentalAgreement {
         return this.finalCharge;
     }
 
-    public void setFinalCharge(double finalCharge) {
+    public void setFinalCharge(final double finalCharge) {
         this.finalCharge = finalCharge;
     }
 
     @Override
     public String toString() {
-        return "{" + " tool='" + getTool() + "'" + ", length='" + getLength() + "'" + ", checkoutDate='"
-                + getCheckoutDate() + "'" + ", dueDate='" + getDueDate() + "'" + ", chargeDays='" + getChargeDays()
-                + "'" + ", discountPercent='" + getDiscountPercent() + "'" + ", preDiscountCharge='"
-                + getPreDiscountCharge() + "'" + ", discountAmount='" + getDiscountAmount() + "'" + ", finalCharge='"
-                + getFinalCharge() + "'" + "}";
-    }
 
+        final StringJoiner result = new StringJoiner(System.lineSeparator());
+
+        result.add(new StringBuilder("Tool code").append(tool.getCode()));
+        result.add(new StringBuilder("Tool type: ").append(tool.getType()));
+        result.add(new StringBuilder("Rental days: ").append(length));
+        result.add(new StringBuilder("Check out date: ").append(checkoutDate.format(dateFormatter)));
+        result.add(new StringBuilder("Due date: ").append(dueDate.format(dateFormatter)));
+        result.add(new StringBuilder("Daily rental charge: ").append(currencyFormatter.format(tool.getCharge())));
+        result.add(new StringBuilder("Charge Days: ").append(chargeDays));
+        result.add(new StringBuilder("Pre-discount charge: ").append(currencyFormatter.format(preDiscountCharge)));
+        result.add(new StringBuilder("Discount percent: ").append(discountPercent).append("%"));
+        result.add(new StringBuilder("Discount amount: ").append(currencyFormatter.format(discountAmount)));
+        result.add(new StringBuilder("Final charge: ").append(currencyFormatter.format(finalCharge)));
+
+        return result.toString();
+    }
 }
