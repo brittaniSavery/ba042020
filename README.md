@@ -1,1 +1,3 @@
-# ba042020
+# Coding exercise
+
+Creating tool renting service from "Fake Depot"
