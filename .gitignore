@@ -12,13 +12,6 @@ buildNumber.properties
 .mvn/timing.properties
 
 #
-# IntelliJ
-#
-*.iml
-.idea/*
-!.idea/runConfigurations/
-
-#
 # Visual Studio Code
 #
 .settings/
