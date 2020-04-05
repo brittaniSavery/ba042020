@@ -2,6 +2,7 @@ package com.brittanisavery.demos;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
@@ -27,5 +28,21 @@ public class RentalAgreementTest {
         assertTrue(agreement.getCheckoutDate() instanceof LocalDate);
         assertEquals(agreement.getRentalDays(), 5);
         assertEquals(agreement.getDiscountPercent(), 20);
+    }
+
+    @Test
+    public void Should_ThrowException_When_RentalDaysIsNonPositiveNumber() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            RentalAgreement agreement = new RentalAgreement("CHNS", LocalDate.of(2020, Month.APRIL, 20), 0, 20);
+            agreement.getRentalDays();
+        });
+    }
+
+    @Test
+    public void Should_ThrowException_When_DiscountAmountIsInvalid() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            RentalAgreement agreement = new RentalAgreement("CHNS", LocalDate.of(2020, Month.APRIL, 20), 5, 101);
+            agreement.getRentalDays();
+        });
     }
 }

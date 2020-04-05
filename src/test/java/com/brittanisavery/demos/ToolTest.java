@@ -35,7 +35,7 @@ public class ToolTest {
     }
 
     @Test
-    public void Should_FailWithException_When_CodeIsNotFound() {
+    public void Should_ThrowException_When_CodeIsNotFound() {
         assertThrows(IllegalArgumentException.class, () -> {
             Tool tool = new Tool("ADBC");
             tool.getCode();

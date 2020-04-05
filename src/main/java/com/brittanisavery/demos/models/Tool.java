@@ -41,7 +41,7 @@ public class Tool {
                 break;
             default:
                 throw new IllegalArgumentException(
-                        "Sorry, this tool could not be found. Double-check for typos and please try again.");
+                        "This tool could not be found. Please double-check for typos and try again.");
         }
     }
 

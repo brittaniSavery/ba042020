@@ -16,22 +16,29 @@ public class RentalAgreement {
     private double discountAmount;
     private double finalCharge;
 
-    protected final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MM/dd/yy");
-    protected final NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance();
+    protected final static DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MM/dd/yy");
+    protected final static NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance();
 
     public RentalAgreement(String toolCode, LocalDate checkoutDate, int rentalDays, int discountPercent)
             throws Exception {
         this.tool = new Tool(toolCode);
         this.checkoutDate = checkoutDate;
+
+        if (rentalDays < 1)
+            throw new IllegalArgumentException(
+                    "A tool should be rented out for one or more days. Please enter the number of days you will need the tool.");
+
         this.rentalDays = rentalDays;
+
+        if (discountPercent < 0 || discountPercent > 100)
+            throw new IllegalArgumentException(
+                    "A valid discount amount is 0-100%. Please double-check for typos and try again.");
+
         this.discountPercent = discountPercent;
     }
 
     public RentalAgreement(String toolCode, String checkoutDate, int rentalDays, int discountPercent) throws Exception {
-        this.tool = new Tool(toolCode);
-        this.checkoutDate = LocalDate.parse(checkoutDate, dateFormatter);
-        this.rentalDays = rentalDays;
-        this.discountPercent = discountPercent;
+        this(toolCode, LocalDate.parse(checkoutDate, dateFormatter), rentalDays, discountPercent);
     }
 
     public void checkout() {
