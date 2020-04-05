@@ -7,7 +7,7 @@ import java.util.StringJoiner;
 
 public class RentalAgreement {
     private Tool tool;
-    private int length;
+    private int rentalDays;
     private LocalDate checkoutDate;
     private LocalDate dueDate;
     private int chargeDays;
@@ -16,8 +16,27 @@ public class RentalAgreement {
     private double discountAmount;
     private double finalCharge;
 
-    protected final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("mm/dd/yy");
+    protected final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MM/dd/yy");
     protected final NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance();
+
+    public RentalAgreement(String toolCode, LocalDate checkoutDate, int rentalDays, int discountPercent)
+            throws Exception {
+        this.tool = new Tool(toolCode);
+        this.checkoutDate = checkoutDate;
+        this.rentalDays = rentalDays;
+        this.discountPercent = discountPercent;
+    }
+
+    public RentalAgreement(String toolCode, String checkoutDate, int rentalDays, int discountPercent) throws Exception {
+        this.tool = new Tool(toolCode);
+        this.checkoutDate = LocalDate.parse(checkoutDate, dateFormatter);
+        this.rentalDays = rentalDays;
+        this.discountPercent = discountPercent;
+    }
+
+    public void checkout() {
+
+    }
 
     public Tool getTool() {
         return this.tool;
@@ -27,12 +46,12 @@ public class RentalAgreement {
         this.tool = tool;
     }
 
-    public int getLength() {
-        return this.length;
+    public int getRentalDays() {
+        return this.rentalDays;
     }
 
-    public void setLength(final int length) {
-        this.length = length;
+    public void setRentalDays(final int rentalDays) {
+        this.rentalDays = rentalDays;
     }
 
     public LocalDate getCheckoutDate() {
@@ -98,7 +117,7 @@ public class RentalAgreement {
 
         result.add(new StringBuilder("Tool code").append(tool.getCode()));
         result.add(new StringBuilder("Tool type: ").append(tool.getType()));
-        result.add(new StringBuilder("Rental days: ").append(length));
+        result.add(new StringBuilder("Rental days: ").append(rentalDays));
         result.add(new StringBuilder("Check out date: ").append(checkoutDate.format(dateFormatter)));
         result.add(new StringBuilder("Due date: ").append(dueDate.format(dateFormatter)));
         result.add(new StringBuilder("Daily rental charge: ").append(currencyFormatter.format(tool.getCharge())));
