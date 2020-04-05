@@ -42,6 +42,7 @@ public class RentalAgreement {
     }
 
     public void checkout() {
+        setDueDate(this.checkoutDate, this.rentalDays);
 
     }
 
@@ -75,6 +76,10 @@ public class RentalAgreement {
 
     public void setDueDate(final LocalDate dueDate) {
         this.dueDate = dueDate;
+    }
+
+    private void setDueDate(LocalDate checkoutDate, int rentalDays) {
+        this.dueDate = checkoutDate.plusDays(rentalDays);
     }
 
     public int getChargeDays() {
