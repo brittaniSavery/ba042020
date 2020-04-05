@@ -22,8 +22,8 @@ public class Tool {
                 break;
             case CHNS:
                 this.code = Code.CHNS;
-                this.type = "Ladder";
-                this.brand = "Chainsaw";
+                this.type = "Chainsaw";
+                this.brand = "Stihl";
                 this.charge = 1.49;
                 this.busCharge = true;
                 this.weekendCharge = false;
@@ -40,7 +40,7 @@ public class Tool {
                 this.holidayCharge = false;
                 break;
             default:
-                throw new Exception(
+                throw new IllegalArgumentException(
                         "Sorry, this tool could not be found. Double-check for typos and please try again.");
         }
     }
