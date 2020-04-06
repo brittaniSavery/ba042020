@@ -65,7 +65,6 @@ public class RentalAgreement {
                 .filter(day -> !isWeekend(day) || this.tool.hasWeekendCharge())
                 .filter(day -> !isHoliday(day) || this.tool.hasHolidayCharge())
                 .count());
-
     }
 
     protected boolean isHoliday(LocalDate date) {

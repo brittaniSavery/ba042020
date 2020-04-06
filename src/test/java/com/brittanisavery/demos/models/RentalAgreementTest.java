@@ -60,6 +60,29 @@ public class RentalAgreementTest {
         agreement.calculateChargeDays();
         assertEquals(agreement.getChargeDays(), 3);
     }
+
+    @Test
+    public void Should_Return3ChargeDays_When_ToolIsLadderAndRentalDaysIs4AndHasHolidaysAndWeekends() throws Exception {
+        RentalAgreement agreement = new RentalAgreement("LADW", "07/01/20", 4, 20);
+        agreement.calculateChargeDays();
+        assertEquals(agreement.getChargeDays(), 3);
+    }
+
+    @Test
+    public void Should_Return3ChargeDays_When_ToolIsChainsawAndRentalDaysIs4AndHasHolidaysAndWeekends()
+            throws Exception {
+        RentalAgreement agreement = new RentalAgreement("CHNS", "07/01/20", 4, 20);
+        agreement.calculateChargeDays();
+        assertEquals(agreement.getChargeDays(), 2);
+    }
+
+    @Test
+    public void Should_Return3ChargeDays_When_ToolIsJackhammerAndRentalDaysIs4AndHasHolidaysAndWeekends()
+            throws Exception {
+        RentalAgreement agreement = new RentalAgreement("JAKR", "07/01/20", 4, 20);
+        agreement.calculateChargeDays();
+        assertEquals(agreement.getChargeDays(), 1);
+    }
     // #endregion
 
     // #region IsHoilday Tests
