@@ -1,4 +1,4 @@
-package com.brittanisavery.demos;
+package com.brittanisavery.demos.models;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -7,8 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
 import java.time.Month;
-
-import com.brittanisavery.demos.models.RentalAgreement;
 
 public class RentalAgreementTest {
 

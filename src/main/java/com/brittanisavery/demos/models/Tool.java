@@ -49,6 +49,8 @@ public class Tool {
         LADW, CHNS, JAKR, JAKD
     }
 
+    // #region Getters and Setters
+
     public Code getCode() {
         return this.code;
     }
@@ -104,4 +106,6 @@ public class Tool {
     public void setHolidayCharge(boolean holidayCharge) {
         this.holidayCharge = holidayCharge;
     }
+
+    // #endregion
 }

@@ -1,10 +1,8 @@
-package com.brittanisavery.demos;
+package com.brittanisavery.demos.models;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-
-import com.brittanisavery.demos.models.Tool;
 
 public class ToolTest {
 
