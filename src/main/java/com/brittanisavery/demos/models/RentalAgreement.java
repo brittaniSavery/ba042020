@@ -24,6 +24,7 @@ public class RentalAgreement {
 
     protected final static DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MM/dd/yy");
     protected final static NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance();
+    protected final static MathContext currencyContext = new MathContext(4, RoundingMode.HALF_UP);
 
     // #region Constructors
 
@@ -58,8 +59,20 @@ public class RentalAgreement {
                     "A valid discount amount is 0-100%. Please double-check for typos and try again.");
 
         calculateChargeDays();
-        MathContext currencyContext = new MathContext(2, RoundingMode.HALF_UP);
-        this.preDiscountCharge = tool.getCharge().multiply(BigDecimal.valueOf((long) this.chargeDays), currencyContext);
+        calculateDiscountAmount();
+        this.finalCharge = this.preDiscountCharge.subtract(this.discountAmount, currencyContext);
+    }
+
+    protected void calculateDiscountAmount() {
+        double discountDecimal = (double) this.discountPercent / 100;
+        BigDecimal discountBigDecimal = BigDecimal.valueOf(discountDecimal).setScale(2, RoundingMode.HALF_UP);
+        BigDecimal chargeDaysBigDecimal = BigDecimal.valueOf((double) this.chargeDays)
+                .setScale(2, RoundingMode.HALF_UP);
+        this.preDiscountCharge = tool.getCharge()
+                .multiply(chargeDaysBigDecimal, currencyContext)
+                .setScale(2, RoundingMode.HALF_UP);
+        this.discountAmount = discountBigDecimal.multiply(this.preDiscountCharge, currencyContext)
+                .setScale(2, RoundingMode.HALF_UP);
     }
 
     protected void calculateChargeDays() {

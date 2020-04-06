@@ -1,6 +1,7 @@
 package com.brittanisavery.demos.models;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public class Tool {
     private Code code;
@@ -11,13 +12,13 @@ public class Tool {
     private boolean weekendCharge;
     private boolean holidayCharge;
 
-    public Tool(String code) throws Exception {
-        switch (Code.valueOf(code)) {
+    public Tool(Code code) throws Exception {
+        switch (code) {
             case LADW:
                 this.code = Code.LADW;
                 this.type = "Ladder";
                 this.brand = "Werner";
-                this.charge = new BigDecimal("1.99");
+                this.charge = new BigDecimal("1.99").setScale(2, RoundingMode.HALF_UP);
                 this.busCharge = true;
                 this.weekendCharge = true;
                 this.holidayCharge = false;
@@ -26,17 +27,17 @@ public class Tool {
                 this.code = Code.CHNS;
                 this.type = "Chainsaw";
                 this.brand = "Stihl";
-                this.charge = new BigDecimal("1.49");
+                this.charge = new BigDecimal("1.49").setScale(2, RoundingMode.HALF_UP);
                 this.busCharge = true;
                 this.weekendCharge = false;
                 this.holidayCharge = true;
                 break;
             case JAKR:
             case JAKD:
-                this.code = Code.valueOf(code);
+                this.code = code;
                 this.type = "Jackhammer";
                 this.brand = this.code == Code.JAKR ? "Ridgid" : "DeWalt";
-                this.charge = new BigDecimal("2.99");
+                this.charge = new BigDecimal("2.99").setScale(2, RoundingMode.HALF_UP);
                 this.busCharge = true;
                 this.weekendCharge = false;
                 this.holidayCharge = false;
@@ -45,6 +46,10 @@ public class Tool {
                 throw new IllegalArgumentException(
                         "This tool could not be found. Please double-check for typos and try again.");
         }
+    }
+
+    public Tool(String code) throws Exception {
+        this(Code.valueOf(code));
     }
 
     public static enum Code {
