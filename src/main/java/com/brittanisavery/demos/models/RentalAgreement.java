@@ -1,5 +1,8 @@
 package com.brittanisavery.demos.models;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -15,9 +18,9 @@ public class RentalAgreement {
     private LocalDate dueDate;
     private int chargeDays;
     private int discountPercent;
-    private double preDiscountCharge;
-    private double discountAmount;
-    private double finalCharge;
+    private BigDecimal preDiscountCharge;
+    private BigDecimal discountAmount;
+    private BigDecimal finalCharge;
 
     protected final static DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MM/dd/yy");
     protected final static NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance();
@@ -55,6 +58,8 @@ public class RentalAgreement {
                     "A valid discount amount is 0-100%. Please double-check for typos and try again.");
 
         calculateChargeDays();
+        MathContext currencyContext = new MathContext(2, RoundingMode.HALF_UP);
+        this.preDiscountCharge = tool.getCharge().multiply(BigDecimal.valueOf((long) this.chargeDays), currencyContext);
     }
 
     protected void calculateChargeDays() {
@@ -156,27 +161,27 @@ public class RentalAgreement {
         this.discountPercent = discountPercent;
     }
 
-    public double getPreDiscountCharge() {
+    public BigDecimal getPreDiscountCharge() {
         return this.preDiscountCharge;
     }
 
-    public void setPreDiscountCharge(final double preDiscountCharge) {
+    public void setPreDiscountCharge(final BigDecimal preDiscountCharge) {
         this.preDiscountCharge = preDiscountCharge;
     }
 
-    public double getDiscountAmount() {
+    public BigDecimal getDiscountAmount() {
         return this.discountAmount;
     }
 
-    public void setDiscountAmount(final double discountAmount) {
+    public void setDiscountAmount(final BigDecimal discountAmount) {
         this.discountAmount = discountAmount;
     }
 
-    public double getFinalCharge() {
+    public BigDecimal getFinalCharge() {
         return this.finalCharge;
     }
 
-    public void setFinalCharge(final double finalCharge) {
+    public void setFinalCharge(final BigDecimal finalCharge) {
         this.finalCharge = finalCharge;
     }
 
