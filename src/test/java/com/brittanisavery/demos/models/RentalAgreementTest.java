@@ -30,19 +30,19 @@ public class RentalAgreementTest {
     @Test
     public void Should_ReturnRentalAgreement_When_AllValuesValidWithLocalDate() throws Exception {
         RentalAgreement agreement = new RentalAgreement(CHAINSAW, APRIL_20TH, 5, 20);
-        assertEquals(agreement.getTool().getType(), "Chainsaw");
+        assertEquals("Chainsaw", agreement.getTool().getType());
         assertTrue(agreement.getCheckoutDate() instanceof LocalDate);
-        assertEquals(agreement.getRentalDays(), 5);
-        assertEquals(agreement.getDiscountPercent(), 20);
+        assertEquals(5, agreement.getRentalDays());
+        assertEquals(20, agreement.getDiscountPercent());
     }
 
     @Test
     public void Should_ReturnRentalAgreement_When_AllValuesValidWithStringDate() throws Exception {
         RentalAgreement agreement = new RentalAgreement(CHAINSAW, "04/20/20", 5, 20);
-        assertEquals(agreement.getTool().getType(), "Chainsaw");
+        assertEquals("Chainsaw", agreement.getTool().getType());
         assertTrue(agreement.getCheckoutDate() instanceof LocalDate);
-        assertEquals(agreement.getRentalDays(), 5);
-        assertEquals(agreement.getDiscountPercent(), 20);
+        assertEquals(5, agreement.getRentalDays());
+        assertEquals(20, agreement.getDiscountPercent());
     }
 
     // #endregion
@@ -52,28 +52,28 @@ public class RentalAgreementTest {
     public void Should_Return5ChargeDays_When_ToolIsLadderAndRentalDaysIs5AndIncludesWeekends() throws Exception {
         RentalAgreement agreement = new RentalAgreement(LADDER, APRIL_2ND, 5, 20);
         agreement.calculateChargeDays();
-        assertEquals(agreement.getChargeDays(), 5);
+        assertEquals(5, agreement.getChargeDays());
     }
 
     @Test
     public void Should_Return3ChargeDays_When_ToolIsChainsawAndRentalDaysIs5AndIncludesWeends() throws Exception {
         RentalAgreement agreement = new RentalAgreement(CHAINSAW, APRIL_2ND, 5, 20);
         agreement.calculateChargeDays();
-        assertEquals(agreement.getChargeDays(), 3);
+        assertEquals(3, agreement.getChargeDays());
     }
 
     @Test
     public void Should_Return3ChargeDays_When_ToolIsJackhammerAndRentalDaysIs5AndIncludesWeends() throws Exception {
         RentalAgreement agreement = new RentalAgreement(JACKHAMMER_R, APRIL_2ND, 5, 20);
         agreement.calculateChargeDays();
-        assertEquals(agreement.getChargeDays(), 3);
+        assertEquals(3, agreement.getChargeDays());
     }
 
     @Test
     public void Should_Return3ChargeDays_When_ToolIsLadderAndRentalDaysIs4AndHasHolidaysAndWeekends() throws Exception {
         RentalAgreement agreement = new RentalAgreement(LADDER, JULY_1ST, 4, 20);
         agreement.calculateChargeDays();
-        assertEquals(agreement.getChargeDays(), 3);
+        assertEquals(3, agreement.getChargeDays());
     }
 
     @Test
@@ -81,7 +81,7 @@ public class RentalAgreementTest {
             throws Exception {
         RentalAgreement agreement = new RentalAgreement(CHAINSAW, JULY_1ST, 4, 20);
         agreement.calculateChargeDays();
-        assertEquals(agreement.getChargeDays(), 2);
+        assertEquals(2, agreement.getChargeDays());
     }
 
     @Test
@@ -89,7 +89,7 @@ public class RentalAgreementTest {
             throws Exception {
         RentalAgreement agreement = new RentalAgreement(JACKHAMMER_R, JULY_1ST, 4, 20);
         agreement.calculateChargeDays();
-        assertEquals(agreement.getChargeDays(), 1);
+        assertEquals(1, agreement.getChargeDays());
     }
     // #endregion
 
@@ -99,7 +99,7 @@ public class RentalAgreementTest {
         RentalAgreement agreement = new RentalAgreement(LADDER, APRIL_20TH, 6, 25);
         agreement.setChargeDays(6);
         agreement.calculateDiscountAmount();
-        assertEquals(agreement.getDiscountAmount(), new BigDecimal("2.99"));
+        assertEquals(new BigDecimal("2.99"), agreement.getDiscountAmount());
     }
 
     @Test
@@ -107,7 +107,7 @@ public class RentalAgreementTest {
         RentalAgreement agreement = new RentalAgreement(CHAINSAW, APRIL_20TH, 6, 25);
         agreement.setChargeDays(6);
         agreement.calculateDiscountAmount();
-        assertEquals(agreement.getDiscountAmount(), new BigDecimal("2.24"));
+        assertEquals(new BigDecimal("2.24"), agreement.getDiscountAmount());
     }
 
     @Test
@@ -115,7 +115,7 @@ public class RentalAgreementTest {
         RentalAgreement agreement = new RentalAgreement(JACKHAMMER_D, APRIL_20TH, 6, 25);
         agreement.setChargeDays(6);
         agreement.calculateDiscountAmount();
-        assertEquals(agreement.getDiscountAmount(), new BigDecimal("4.49"));
+        assertEquals(new BigDecimal("4.49"), agreement.getDiscountAmount());
     }
     // #endregion
 
@@ -168,11 +168,46 @@ public class RentalAgreementTest {
 
     // #region Final Tests from Spec
     @Test
-    public void Should_ThrowException_When_DiscountAmountIsInvalid() {
+    public void Should_ThrowException_When_DiscountAmountIsInvalidForSpecTest1() {
         assertThrows(IllegalArgumentException.class, () -> {
             RentalAgreement agreement = new RentalAgreement("JAKR", "09/03/15", 5, 101);
             agreement.checkout();
         });
+    }
+
+    @Test
+    public void Should_ReturnFinalChargeOf3DollarsAnd58Cents_When_UsingSpecTest2() throws Exception {
+        RentalAgreement agreement = new RentalAgreement("LADW", "07/02/20", 3, 10);
+        agreement.checkout();
+        assertEquals(new BigDecimal("3.58"), agreement.getFinalCharge());
+    }
+
+    @Test
+    public void Should_ReturnFinalChargeOf3DollarsAnd35Cents_When_UsingSpecTest3() throws Exception {
+        RentalAgreement agreement = new RentalAgreement("CHNS", "07/02/15", 5, 25);
+        agreement.checkout();
+        assertEquals(new BigDecimal("3.35"), agreement.getFinalCharge());
+    }
+
+    @Test
+    public void Should_ReturnFinalChargeOf8DollarsAnd97Cents_When_UsingSpecTest4() throws Exception {
+        RentalAgreement agreement = new RentalAgreement("JAKD", "09/03/15", 6, 0);
+        agreement.checkout();
+        assertEquals(new BigDecimal("8.97"), agreement.getFinalCharge());
+    }
+
+    @Test
+    public void Should_ReturnFinalChargeOf14DollarsAnd95Cents_When_UsingSpecTest5() throws Exception {
+        RentalAgreement agreement = new RentalAgreement("JAKR", "07/02/15", 9, 0);
+        agreement.checkout();
+        assertEquals(new BigDecimal("14.95"), agreement.getFinalCharge());
+    }
+
+    @Test
+    public void Should_ReturnFinalChargeOf1DollarsAnd49Cents_When_UsingSpecTest6() throws Exception {
+        RentalAgreement agreement = new RentalAgreement("JAKR", "07/02/20", 4, 50);
+        agreement.checkout();
+        assertEquals(new BigDecimal("1.49"), agreement.getFinalCharge());
     }
 
     // #endregion
