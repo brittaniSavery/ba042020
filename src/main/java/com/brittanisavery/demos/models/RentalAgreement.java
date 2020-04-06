@@ -1,9 +1,12 @@
 package com.brittanisavery.demos.models;
 
 import java.text.NumberFormat;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.StringJoiner;
+import java.util.stream.Stream;
 
 public class RentalAgreement {
     private Tool tool;
@@ -19,21 +22,17 @@ public class RentalAgreement {
     protected final static DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MM/dd/yy");
     protected final static NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance();
 
+    // #region Constructors
+
+    public RentalAgreement() {
+
+    }
+
     public RentalAgreement(String toolCode, LocalDate checkoutDate, int rentalDays, int discountPercent)
             throws Exception {
         this.tool = new Tool(toolCode);
         this.checkoutDate = checkoutDate;
-
-        if (rentalDays < 1)
-            throw new IllegalArgumentException(
-                    "A tool should be rented out for one or more days. Please enter the number of days you will need the tool.");
-
         this.rentalDays = rentalDays;
-
-        if (discountPercent < 0 || discountPercent > 100)
-            throw new IllegalArgumentException(
-                    "A valid discount amount is 0-100%. Please double-check for typos and try again.");
-
         this.discountPercent = discountPercent;
     }
 
@@ -41,10 +40,74 @@ public class RentalAgreement {
         this(toolCode, LocalDate.parse(checkoutDate, dateFormatter), rentalDays, discountPercent);
     }
 
+    // #endregion
+
+    // #region Logic Methods
+
     public void checkout() {
-        setDueDate(this.checkoutDate, this.rentalDays);
+
+        if (this.rentalDays < 1)
+            throw new IllegalArgumentException(
+                    "A tool should be rented out for one or more days. Please enter the number of days you will need the tool.");
+
+        if (this.discountPercent < 0 || this.discountPercent > 100)
+            throw new IllegalArgumentException(
+                    "A valid discount amount is 0-100%. Please double-check for typos and try again.");
+
+        calculateChargeDays();
+    }
+
+    protected void calculateChargeDays() {
+        this.dueDate = this.checkoutDate.plusDays(this.rentalDays);
+        LocalDate chargeStart = this.checkoutDate.plusDays(1);
+        this.chargeDays = Math.toIntExact(Stream.iterate(chargeStart, day -> day.plusDays(1))
+                .limit(this.rentalDays)
+                .filter(day -> !isWeekend(day) || this.tool.hasWeekendCharge())
+                .filter(day -> !isHoliday(day) || this.tool.hasHolidayCharge())
+                .count());
 
     }
+
+    protected boolean isHoliday(LocalDate date) {
+        return isJuly4th(date) || isLaborDay(date);
+    }
+
+    private boolean isWeekend(LocalDate date) {
+        DayOfWeek day = date.getDayOfWeek();
+        return day == DayOfWeek.SATURDAY || day == DayOfWeek.SUNDAY;
+    }
+
+    private boolean isJuly4th(LocalDate date) {
+        LocalDate holiday = date.withMonth(Month.JULY.getValue()).withDayOfMonth(4);
+
+        switch (holiday.getDayOfWeek()) {
+            case SATURDAY:
+                holiday = holiday.minusDays(1);
+                break;
+            case SUNDAY:
+                holiday = holiday.plusDays(1);
+                break;
+            default:
+        }
+
+        return date.equals(holiday);
+    }
+
+    private boolean isLaborDay(LocalDate date) {
+        LocalDate sept1st = date.withMonth(Month.SEPTEMBER.getValue()).withDayOfMonth(1);
+
+        LocalDate holiday = Stream.iterate(sept1st, day -> day.plusDays(1))
+                .limit(7)
+                .filter(day -> day.getDayOfWeek() == DayOfWeek.MONDAY)
+                .findFirst()
+                .get();
+
+        return date.equals(holiday);
+    }
+
+    // #endregion
+
+    // #region Getters and Setters
 
     public Tool getTool() {
         return this.tool;
@@ -76,10 +139,6 @@ public class RentalAgreement {
 
     public void setDueDate(final LocalDate dueDate) {
         this.dueDate = dueDate;
-    }
-
-    private void setDueDate(LocalDate checkoutDate, int rentalDays) {
-        this.dueDate = checkoutDate.plusDays(rentalDays);
     }
 
     public int getChargeDays() {
@@ -121,6 +180,8 @@ public class RentalAgreement {
     public void setFinalCharge(final double finalCharge) {
         this.finalCharge = finalCharge;
     }
+
+    // #endregion
 
     @Override
     public String toString() {
