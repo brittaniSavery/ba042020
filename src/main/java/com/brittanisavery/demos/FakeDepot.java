@@ -6,10 +6,11 @@ public final class FakeDepot {
 
     public static void main(String[] args) {
         try {
-            RentalAgreement agreement = new RentalAgreement("JAKR", "04/02/20", 5, 20);
+            RentalAgreement agreement = new RentalAgreement("LADW", "07/01/20", 4, 20);
             agreement.checkout();
+            System.out.println(agreement);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 }

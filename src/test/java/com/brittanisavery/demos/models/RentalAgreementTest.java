@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.StringJoiner;
 
 public class RentalAgreementTest {
 
@@ -213,5 +214,26 @@ public class RentalAgreementTest {
     // #endregion
 
     // #endregion
+
+    @Test
+    public void Should_ReturnProperRentalAgreementString_When_PrintingAgreement() throws Exception {
+        final StringJoiner result = new StringJoiner(System.lineSeparator());
+        result.add("Tool code: LADW");
+        result.add("Tool type: Ladder");
+        result.add("Tool brand: Werner");
+        result.add("Rental days: 4");
+        result.add("Check out date: 07/01/20");
+        result.add("Due date: 07/05/20");
+        result.add("Daily rental charge: $1.99");
+        result.add("Charge Days: 3");
+        result.add("Pre-discount charge: $5.97");
+        result.add("Discount percent: 20%");
+        result.add("Discount amount: $1.19");
+        result.add("Final charge: $4.78");
+
+        RentalAgreement agreement = new RentalAgreement(LADDER, JULY_1ST, 4, 20);
+        agreement.checkout();
+        assertEquals(result.toString(), agreement.toString());
+    }
 
 }

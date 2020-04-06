@@ -205,8 +205,9 @@ public class RentalAgreement {
 
         final StringJoiner result = new StringJoiner(System.lineSeparator());
 
-        result.add(new StringBuilder("Tool code").append(tool.getCode()));
+        result.add(new StringBuilder("Tool code: ").append(tool.getCode()));
         result.add(new StringBuilder("Tool type: ").append(tool.getType()));
+        result.add(new StringBuilder("Tool brand: ").append(tool.getBrand()));
         result.add(new StringBuilder("Rental days: ").append(rentalDays));
         result.add(new StringBuilder("Check out date: ").append(checkoutDate.format(dateFormatter)));
         result.add(new StringBuilder("Due date: ").append(dueDate.format(dateFormatter)));
